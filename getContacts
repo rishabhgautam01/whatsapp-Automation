@@ -1,0 +1,54 @@
+
+import pandas as pd
+import csv
+
+answer = []
+def getContacts():
+
+    df = pd.read_csv("contacts.csv")
+
+    dictContact = dict()
+
+    count = 0
+    for i, row in df.iterrows():
+        dictContact[df.at[i, 'Name']] = df.at[i, 'Phone 1 - Value']
+        # print("{}. {}".format(count + 1, dictContact))
+    return dictContact
+
+
+def selectContactsForMessages():
+    con = getContacts()
+    messageCont=dict()
+    for i in con:
+        choice = input("{}  Y or N  ".format(i))
+        answer.append(choice)
+        if choice =="Y" or choice == "y":
+            messageCont[i] = con[i]
+
+
+
+    return messageCont
+
+
+list_of_cont=selectContactsForMessages()
+for i in list_of_cont:
+    print("{} : {}".format(i,list_of_cont[i]))
+
+
+
+def saveFile():
+    l=list()
+    for i in list_of_cont:
+        l.append([i, list_of_cont[i]])
+
+    with open("whatsappMsgList.csv", 'w') as csvfile:
+        # creating a csv writer object
+        csvwriter = csv.writer(csvfile)
+
+        # writing the fields
+        csvwriter.writerow(["Name", "Number"])
+
+        # writing the data rows
+        csvwriter.writerows(l)
+
+saveFile()
